@@ -1,0 +1,696 @@
+{
+    "sostenidos": {
+        "SolMayor": {
+            "nombre": "Sol Mayor",
+            "notas": {
+                "Sol4": {
+                    "midi": 67,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "La4": {
+                    "midi": 69,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Si4": {
+                    "midi": 71,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Mi5": {
+                    "midi": 76,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Fa#5": {
+                    "midi": 78,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Sol5": {
+                    "midi": 79,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "ReMayor": {
+            "nombre": "Re Mayor",
+            "notas": {
+                "Re4": {
+                    "midi": 62,
+                    "valvulas": [
+                        1,
+                        0,
+                        1
+                    ]
+                },
+                "Mi4": {
+                    "midi": 64,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Fa#4": {
+                    "midi": 66,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Sol4": {
+                    "midi": 67,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "La4": {
+                    "midi": 69,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Si4": {
+                    "midi": 71,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Do#5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "LaMayor": {
+            "nombre": "La Mayor",
+            "notas": {
+                "La4": {
+                    "midi": 69,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Si4": {
+                    "midi": 71,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Do#5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Mi5": {
+                    "midi": 76,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Fa#5": {
+                    "midi": 78,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Sol#5": {
+                    "midi": 80,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "La5": {
+                    "midi": 81,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                }
+            }
+        },
+        "MiMayor": {
+            "nombre": "Mi Mayor",
+            "notas": {
+                "Mi4": {
+                    "midi": 64,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Fa#4": {
+                    "midi": 66,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Sol#4": {
+                    "midi": 68,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "La4": {
+                    "midi": 69,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Si4": {
+                    "midi": 71,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Do#5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Re#5": {
+                    "midi": 75,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Mi5": {
+                    "midi": 76,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "SiMayor": {
+            "nombre": "Si Mayor",
+            "notas": {
+                "Si4": {
+                    "midi": 71,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Do#5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Re#5": {
+                    "midi": 75,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Mi5": {
+                    "midi": 76,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Fa#5": {
+                    "midi": 78,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Sol#5": {
+                    "midi": 80,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "La#5": {
+                    "midi": 82,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Si5": {
+                    "midi": 83,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                }
+            }
+        }
+    },
+    "bemoles": {
+        "FaMayor": {
+            "nombre": "Fa Mayor",
+            "notas": {
+                "Fa4": {
+                    "midi": 65,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Sol4": {
+                    "midi": 67,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "La4": {
+                    "midi": 69,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Sib4": {
+                    "midi": 70,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Mi5": {
+                    "midi": 76,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Fa5": {
+                    "midi": 77,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "SibMayor": {
+            "nombre": "Si♭ Mayor",
+            "notas": {
+                "Sib4": {
+                    "midi": 70,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Mib5": {
+                    "midi": 75,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Fa5": {
+                    "midi": 77,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Sol5": {
+                    "midi": 79,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "La5": {
+                    "midi": 81,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Sib5": {
+                    "midi": 82,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "MibMayor": {
+            "nombre": "Mi♭ Mayor",
+            "notas": {
+                "Mib4": {
+                    "midi": 63,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "Fa4": {
+                    "midi": 65,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Sol4": {
+                    "midi": 67,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Lab4": {
+                    "midi": 68,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "Sib4": {
+                    "midi": 70,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Re5": {
+                    "midi": 74,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Mib5": {
+                    "midi": 75,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                }
+            }
+        },
+        "LabMayor": {
+            "nombre": "La♭ Mayor",
+            "notas": {
+                "Lab4": {
+                    "midi": 68,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "Sib4": {
+                    "midi": 70,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Reb5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                },
+                "Mib5": {
+                    "midi": 75,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Fa5": {
+                    "midi": 77,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Sol5": {
+                    "midi": 79,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Lab5": {
+                    "midi": 80,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                }
+            }
+        },
+        "RebMayor": {
+            "nombre": "Re♭ Mayor",
+            "notas": {
+                "Reb4": {
+                    "midi": 61,
+                    "valvulas": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                "Mib4": {
+                    "midi": 63,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "Fa4": {
+                    "midi": 65,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Solb4": {
+                    "midi": 66,
+                    "valvulas": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                "Lab4": {
+                    "midi": 68,
+                    "valvulas": [
+                        0,
+                        1,
+                        1
+                    ]
+                },
+                "Sib4": {
+                    "midi": 70,
+                    "valvulas": [
+                        1,
+                        0,
+                        0
+                    ]
+                },
+                "Do5": {
+                    "midi": 72,
+                    "valvulas": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "Reb5": {
+                    "midi": 73,
+                    "valvulas": [
+                        1,
+                        1,
+                        0
+                    ]
+                }
+            }
+        }
+    }
+}
