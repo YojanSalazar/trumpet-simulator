@@ -15,6 +15,10 @@ import {
     FingeringMap
 } from './types';
 
+// Importar datos directamente para evitar problemas de fetch en producción
+import fingeringMapData from './data/fingering_map.json';
+import scalesDataImport from './data/scales.json';
+
 const App: React.FC = () => {
     // ===== ESTADO PRINCIPAL =====
     const [pressedValves, setPressedValves] = useState<ValveCombination>([0, 0, 0]);
@@ -39,10 +43,12 @@ const App: React.FC = () => {
     const [fingeringMap, setFingeringMap] = useState<FingeringMap | null>(null);
     const [noteCount, setNoteCount] = useState<number>(5);
     const [showHints, setShowHints] = useState<boolean>(true);
+    const [showNoteName, setShowNoteName] = useState<boolean>(true);
     const [practiceMode, setPracticeMode] = useState<'random' | 'scale'>('random');
-    const [scalesData, setScalesData] = useState<any>(null);
     const [selectedScaleType, setSelectedScaleType] = useState<'sostenidos' | 'bemoles'>('sostenidos');
     const [selectedScale, setSelectedScale] = useState<string>('SolMayor');
+
+    const [scalesData, setScalesData] = useState<any>(scalesDataImport);
 
     // ===== CARGA INICIAL DE DATOS =====
     useEffect(() => {
@@ -52,28 +58,24 @@ const App: React.FC = () => {
     }, [noteCount, noteDurationMs, practiceMode, selectedScale, selectedScaleType]);
 
     /**
-     * Carga el mapa de digitaciones desde JSON
+     * Carga el mapa de digitaciones desde JSON importado
      */
     const loadFingeringMap = async () => {
         try {
-            const response = await fetch('/src/data/fingering_map.json');
-            const data = await response.json();
-            setFingeringMap(data);
-            console.log('[App] Mapa de digitaciones cargado');
+            setFingeringMap(fingeringMapData as unknown as FingeringMap);
+            console.log('[App] Mapa de digitaciones cargado (import)');
         } catch (error) {
             console.error('[App] Error al cargar mapa de digitaciones:', error);
         }
     };
 
     /**
-     * Carga las escalas mayores desde JSON
+     * Carga las escalas mayores desde JSON importado
      */
     const loadScales = async () => {
         try {
-            const response = await fetch('/src/data/scales.json');
-            const data = await response.json();
-            setScalesData(data);
-            console.log('[App] Escalas cargadas');
+            setScalesData(scalesDataImport);
+            console.log('[App] Escalas cargadas (import)');
         } catch (error) {
             console.error('[App] Error al cargar escalas:', error);
         }
@@ -378,6 +380,7 @@ const App: React.FC = () => {
         return () => clearInterval(interval);
     }, [practiceState, currentSong, nextNote]);
 
+    const newLocal = "50";
     return (
         <div style={styles.app}>
             <header style={styles.header}>
@@ -394,6 +397,7 @@ const App: React.FC = () => {
                             timeRemaining={timeRemaining}
                             noteDurationMs={noteDurationMs}
                             showHints={showHints}
+                            showNoteName={showNoteName}
                         />
 
                         <ValveButtons
@@ -514,10 +518,10 @@ const App: React.FC = () => {
                                 type="number"
                                 id="noteCount"
                                 min="1"
-                                max="20"
+                                max={newLocal}
                                 value={noteCount}
                                 onChange={(e) => {
-                                    const value = Math.max(1, Math.min(20, parseInt(e.target.value)));
+                                    const value = Math.max(1, Math.min(50, parseInt(e.target.value)));
                                     setNoteCount(value);
                                     loadDefaultSong();
                                 }}
@@ -529,6 +533,17 @@ const App: React.FC = () => {
                                     (8 notas)
                                 </span>
                             )}
+                        </div>
+
+                        <div style={{ borderTop: '1px solid #eee', marginTop: '10px', paddingTop: '10px' }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer', fontWeight: 'bold', color: '#333' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={showNoteName}
+                                    onChange={(e) => setShowNoteName(e.target.checked)}
+                                />
+                                Mostrar nombre de nota
+                            </label>
                         </div>
                     </div>
 

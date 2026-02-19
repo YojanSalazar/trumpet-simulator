@@ -45,6 +45,7 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
 
       // Tecla espacio para notas abiertas (resetea todas las válvulas)
       if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault(); // Evitar scroll
         if (onValveSet) {
           [0, 1, 2].forEach(idx => onValveSet(idx, 0));
         }

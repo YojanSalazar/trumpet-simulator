@@ -114,6 +114,8 @@ export interface NoteDisplayProps {
   noteDurationMs?: number;
   /** Indica si se deben mostrar las pistas visuales */
   showHints?: boolean;
+  /** Indica si se debe mostrar el nombre de la nota debajo del pentagrama */
+  showNoteName?: boolean;
 }
 
 /**

@@ -14,6 +14,7 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({
   timeRemaining,
   noteDurationMs,
   showHints = true,
+  showNoteName = true,
 }) => {
 
   /**
@@ -107,9 +108,11 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({
         <MusicalStaff note={currentNote} width={300} height={150} />
 
         {/* Nombre de la nota como referencia */}
-        <div style={styles.noteNameReference}>
-          {noteNameToSpanish(currentNote)}
-        </div>
+        {showNoteName && (
+          <div style={styles.noteNameReference}>
+            {noteNameToSpanish(currentNote)}
+          </div>
+        )}
       </div>
 
       {/* Digitación esperada - solo se muestra si showHints está activo */}
