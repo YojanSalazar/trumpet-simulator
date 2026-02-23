@@ -49,31 +49,27 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({
   };
 
   const noteNameToSpanish = (note: string) => {
-    // nota esperada en formato like C4, D#4, Bb4
-    const letter = note.replace(/[0-9]/g, '').toUpperCase();
-    const map: Record<string, string> = {
-      'C': 'Do',
-      'C#': 'Do♯',
-      'DB': 'Re♭',
-      'D': 'Re',
-      'D#': 'Re♯',
-      'EB': 'Mi♭',
-      'E': 'Mi',
-      'F': 'Fa',
-      'F#': 'Fa♯',
-      'GB': 'Sol♭',
-      'G': 'Sol',
-      'G#': 'Sol♯',
-      'AB': 'La♭',
-      'A': 'La',
-      'A#': 'La♯',
-      'BB': 'Si♭',
-      'B': 'Si'
-    };
+    // Las notas ya están en formato español (Do4, Re#4, Sib4, Lab4, etc.)
+    // Solo necesitamos reemplazar el sufijo 'b' por el símbolo ♭ para mostrarlo
+    const spanishFlatRoots = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
+    const octaveMatch = note.match(/(\d)$/);
+    const octave = octaveMatch ? octaveMatch[1] : '';
+    const noteName = note.replace(/\d$/, '');
 
-    // Normalize sharp/flat suffixes
-    const normalized = letter.replace('#', '#').replace('♭', 'B');
-    return map[normalized] ?? note;
+    // Si la nota termina en 'b' y empieza con una raíz española, ya está en español con bemol
+    for (const root of spanishFlatRoots) {
+      if (noteName === root + 'b') {
+        return root + '♭' + octave;
+      }
+    }
+
+    // Si termina en '#', reemplazar con sostenido
+    if (noteName.endsWith('#')) {
+      return noteName.replace('#', '♯') + octave;
+    }
+
+    // Nota natural (ya está en español)
+    return note;
   };
 
   /**

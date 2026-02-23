@@ -106,10 +106,10 @@ const App: React.FC = () => {
                     return;
                 }
             } else {
-                // Modo aleatorio: usar todas las notas disponibles
+                // Modo aleatorio: usar todas las notas disponibles (sostenidos y bemoles)
                 const availableNotes = [
-                    "Do4", "Do#4", "Re4", "Re#4", "Mi4", "Fa4", "Fa#4", "Sol4", "Sol#4", "La4", "La#4", "Si4",
-                    "Do5", "Do#5", "Re5", "Re#5", "Mi5", "Fa5", "Fa#5", "Sol5", "Sol#5", "La5", "La#5", "Si5"
+                    "Do4", "Do#4", "Reb4", "Re4", "Re#4", "Mib4", "Mi4", "Fa4", "Fa#4", "Solb4", "Sol4", "Sol#4", "Lab4", "La4", "La#4", "Sib4", "Si4",
+                    "Do5", "Do#5", "Reb5", "Re5", "Re#5", "Mib5", "Mi5", "Fa5", "Fa#5", "Solb5", "Sol5", "Sol#5", "Lab5", "La5", "La#5", "Sib5", "Si5"
                 ];
                 title = `Práctica de ${noteCount} notas`;
 

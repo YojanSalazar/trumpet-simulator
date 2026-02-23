@@ -15,6 +15,14 @@
             1
         ]
     },
+    "Reb4": {
+        "midi": 61,
+        "valvulas": [
+            1,
+            1,
+            1
+        ]
+    },
     "Re4": {
         "midi": 62,
         "valvulas": [
@@ -24,6 +32,14 @@
         ]
     },
     "Re#4": {
+        "midi": 63,
+        "valvulas": [
+            0,
+            1,
+            1
+        ]
+    },
+    "Mib4": {
         "midi": 63,
         "valvulas": [
             0,
@@ -55,6 +71,14 @@
             0
         ]
     },
+    "Solb4": {
+        "midi": 66,
+        "valvulas": [
+            0,
+            1,
+            0
+        ]
+    },
     "Sol4": {
         "midi": 67,
         "valvulas": [
@@ -71,6 +95,14 @@
             1
         ]
     },
+    "Lab4": {
+        "midi": 68,
+        "valvulas": [
+            0,
+            1,
+            1
+        ]
+    },
     "La4": {
         "midi": 69,
         "valvulas": [
@@ -80,6 +112,14 @@
         ]
     },
     "La#4": {
+        "midi": 70,
+        "valvulas": [
+            1,
+            0,
+            0
+        ]
+    },
+    "Sib4": {
         "midi": 70,
         "valvulas": [
             1,
@@ -111,6 +151,14 @@
             0
         ]
     },
+    "Reb5": {
+        "midi": 73,
+        "valvulas": [
+            1,
+            1,
+            0
+        ]
+    },
     "Re5": {
         "midi": 74,
         "valvulas": [
@@ -120,6 +168,14 @@
         ]
     },
     "Re#5": {
+        "midi": 75,
+        "valvulas": [
+            0,
+            1,
+            0
+        ]
+    },
+    "Mib5": {
         "midi": 75,
         "valvulas": [
             0,
@@ -151,6 +207,14 @@
             0
         ]
     },
+    "Solb5": {
+        "midi": 78,
+        "valvulas": [
+            0,
+            1,
+            0
+        ]
+    },
     "Sol5": {
         "midi": 79,
         "valvulas": [
@@ -167,6 +231,14 @@
             1
         ]
     },
+    "Lab5": {
+        "midi": 80,
+        "valvulas": [
+            0,
+            1,
+            1
+        ]
+    },
     "La5": {
         "midi": 81,
         "valvulas": [
@@ -176,6 +248,14 @@
         ]
     },
     "La#5": {
+        "midi": 82,
+        "valvulas": [
+            1,
+            0,
+            0
+        ]
+    },
+    "Sib5": {
         "midi": 82,
         "valvulas": [
             1,
