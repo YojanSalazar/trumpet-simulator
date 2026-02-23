@@ -572,7 +572,7 @@ const App: React.FC = () => {
 
             <footer style={styles.footer}>
                 <p style={styles.footerText}>
-                    Desarrollado con Tauri + React + TypeScript
+                    Desarrollado por: CloudBased
                 </p>
             </footer>
         </div>
