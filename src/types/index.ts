@@ -101,6 +101,8 @@ export interface ValveButtonsProps {
   showHints?: boolean;
   disabled?: boolean;
   onToggleHints?: (show: boolean) => void;
+  /** Índices de las válvulas presionadas incorrectamente — se muestran en rojo */
+  wrongValves?: boolean[];
 }
 
 /**

@@ -22,6 +22,7 @@ import scalesDataImport from './data/scales.json';
 const App: React.FC = () => {
     // ===== ESTADO PRINCIPAL =====
     const [pressedValves, setPressedValves] = useState<ValveCombination>([0, 0, 0]);
+    const [wrongValves, setWrongValves] = useState<boolean[]>([false, false, false]);
     const [stats, setStats] = useState<PlayerStats>({
         correctCount: 0,
         incorrectCount: 0,
@@ -181,6 +182,8 @@ const App: React.FC = () => {
         }
     }, [fingeringMap]);
 
+
+
     const handleValveSet = useCallback((valveIndex: number, value: 0 | 1) => {
         if (!practiceState.isPlaying) return setPressedValves(prev => {
             const newValves = [...prev] as ValveCombination;
@@ -196,58 +199,121 @@ const App: React.FC = () => {
                 const correctFingering = fingeringMap[practiceState.currentNote].valvulas;
                 const isOpenNote = correctFingering.every(v => v === 0);
 
-                let isCorrect = isOpenNote ?
-                    newValves.every(v => v === 0) :
-                    JSON.stringify(newValves) === JSON.stringify(correctFingering);
-
-                const shouldCheck = isOpenNote ?
-                    (newValves.every(v => v === 0) || correctFingering.every(v => v === 0)) :
-                    newValves.some((v, i) => v === 1 && correctFingering[i] === 1);
-
-                if (!shouldCheck) {
-                    return newValves;
-                }
-
-                if (isCorrect) {
-                    const reactionTime = practiceState.startTime
-                        ? Date.now() - practiceState.startTime
-                        : 0;
-
-                    updateScore(true, reactionTime);
-                    playTone(practiceState.currentNote);
-
-                    setTimeout(() => {
-                        if (!currentSong || !fingeringMap) return;
-
-                        const nextIndex = practiceState.currentEventIndex + 1;
-                        if (nextIndex >= currentSong.events.length) {
-                            setPracticeState({
-                                currentEventIndex: -1,
-                                currentNote: null,
-                                expectedFingering: null,
-                                isPlaying: false,
-                                startTime: null,
-                            });
-                            return;
-                        }
-
-                        const nextEvent = currentSong.events[nextIndex];
-                        setPracticeState({
-                            currentEventIndex: nextIndex,
-                            currentNote: nextEvent.pitch,
-                            expectedFingering: fingeringMap[nextEvent.pitch]?.valvulas || null,
-                            isPlaying: true,
-                            startTime: Date.now(),
+                if (isOpenNote) {
+                    if (value === 1) {
+                        // Nota abierta: presionar cualquier válvula = error
+                        setWrongValves(prev => {
+                            const next = [...prev];
+                            next[valveIndex] = true;
+                            return next;
                         });
+                        updateScore(false, practiceState.startTime ? Date.now() - practiceState.startTime : 0);
+                        setTimeout(() => {
+                            setWrongValves(prev => {
+                                const next = [...prev];
+                                next[valveIndex] = false;
+                                return next;
+                            });
+                        }, 150);
+                    } else {
+                        // value=0: verificar si TODAS las válvulas quedaron en 0 → acierto
+                        const allReleased = newValves.every(v => v === 0);
+                        if (allReleased) {
+                            const reactionTime = practiceState.startTime
+                                ? Date.now() - practiceState.startTime
+                                : 0;
+                            updateScore(true, reactionTime);
+                            playTone(practiceState.currentNote);
 
-                        setTimeRemaining(nextEvent.dur_ms);
-                        setPressedValves([0, 0, 0]);
-                    }, 500);
+                            setTimeout(() => {
+                                if (!currentSong || !fingeringMap) return;
+                                const nextIndex = practiceState.currentEventIndex + 1;
+                                if (nextIndex >= currentSong.events.length) {
+                                    setPracticeState({
+                                        currentEventIndex: -1,
+                                        currentNote: null,
+                                        expectedFingering: null,
+                                        isPlaying: false,
+                                        startTime: null,
+                                    });
+                                    return;
+                                }
+                                const nextEvent = currentSong.events[nextIndex];
+                                setPracticeState({
+                                    currentEventIndex: nextIndex,
+                                    currentNote: nextEvent.pitch,
+                                    expectedFingering: fingeringMap[nextEvent.pitch]?.valvulas || null,
+                                    isPlaying: true,
+                                    startTime: Date.now(),
+                                });
+                                setTimeRemaining(nextEvent.dur_ms);
+                                setPressedValves([0, 0, 0]);
+                            }, 500);
+                        }
+                    }
+                } else {
+                    // Nota con válvulas: solo actuar cuando el usuario PRESIONA (value=1)
+                    if (value === 1) {
+                        const isWrongPress = correctFingering[valveIndex] !== 1;
+
+                        if (isWrongPress) {
+                            // Válvula incorrecta → rojo 150ms, contar falla
+                            setWrongValves(prev => {
+                                const next = [...prev];
+                                next[valveIndex] = true;
+                                return next;
+                            });
+                            updateScore(false, practiceState.startTime ? Date.now() - practiceState.startTime : 0);
+                            setTimeout(() => {
+                                setWrongValves(prev => {
+                                    const next = [...prev];
+                                    next[valveIndex] = false;
+                                    return next;
+                                });
+                            }, 150);
+                        } else {
+                            // Válvula correcta: ¿completó toda la combinación?
+                            const isFullyCorrect = JSON.stringify(newValves) === JSON.stringify(correctFingering);
+                            if (isFullyCorrect) {
+                                const reactionTime = practiceState.startTime
+                                    ? Date.now() - practiceState.startTime
+                                    : 0;
+                                updateScore(true, reactionTime);
+                                playTone(practiceState.currentNote);
+
+                                setTimeout(() => {
+                                    if (!currentSong || !fingeringMap) return;
+                                    const nextIndex = practiceState.currentEventIndex + 1;
+                                    if (nextIndex >= currentSong.events.length) {
+                                        setPracticeState({
+                                            currentEventIndex: -1,
+                                            currentNote: null,
+                                            expectedFingering: null,
+                                            isPlaying: false,
+                                            startTime: null,
+                                        });
+                                        return;
+                                    }
+                                    const nextEvent = currentSong.events[nextIndex];
+                                    setPracticeState({
+                                        currentEventIndex: nextIndex,
+                                        currentNote: nextEvent.pitch,
+                                        expectedFingering: fingeringMap[nextEvent.pitch]?.valvulas || null,
+                                        isPlaying: true,
+                                        startTime: Date.now(),
+                                    });
+                                    setTimeRemaining(nextEvent.dur_ms);
+                                    setPressedValves([0, 0, 0]);
+                                }, 500);
+                            }
+                        }
+                    }
                 }
             }
 
             return newValves;
         });
+
     }, [practiceState, currentSong, fingeringMap, playTone]);
 
     const resetValves = useCallback(() => {
@@ -408,6 +474,7 @@ const App: React.FC = () => {
                             showHints={showHints}
                             expectedFingering={showHints ? practiceState.expectedFingering : null}
                             onToggleHints={setShowHints}
+                            wrongValves={wrongValves}
                         />
                     </div>
 

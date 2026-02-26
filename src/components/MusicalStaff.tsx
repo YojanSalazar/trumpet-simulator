@@ -18,7 +18,7 @@ const MusicalStaff: React.FC<MusicalStaffProps> = ({
   height = 200
 }) => {
   // Configuración del pentagrama
-  const staffLineSpacing = 12; // Espacio entre líneas del pentagrama
+  const staffLineSpacing = 13; // Espacio entre líneas del pentagrama
   const staffTop = 60; // Posición Y de la línea superior del pentagrama
   const staffLeft = 80; // Margen izquierdo
   const staffRight = width - 40; // Margen derecho
@@ -31,30 +31,30 @@ const MusicalStaff: React.FC<MusicalStaffProps> = ({
   const notePositions: { [key: string]: number } = {
     // Octava 4 (grave - incluye notas debajo del pentagrama)
     'Do4': 10,   // Debajo del pentagrama (segunda línea adicional inferior)
-    'Do#4': 10, 'Reb4': 10,
+    'Do#4': 10, 'Reb4': 9,
     'Re4': 9,    // Debajo del pentagrama (primera línea adicional inferior)
-    'Re#4': 9, 'Mib4': 9,
+    'Re#4': 9, 'Mib4': 8,
     'Mi4': 8,    // Quinta línea (inferior del pentagrama)
     'Fa4': 7,    // Cuarto espacio
-    'Fa#4': 7, 'Solb4': 7,
+    'Fa#4': 7, 'Solb4': 6,
     'Sol4': 6,   // Cuarta línea
-    'Sol#4': 6, 'Lab4': 6,
+    'Sol#4': 6, 'Lab4': 5,
     'La4': 5,    // Tercer espacio
-    'La#4': 5, 'Sib4': 5,
+    'La#4': 5, 'Sib4': 4,
     'Si4': 4,    // Tercera línea (central)
 
     // Octava 5 (media - rango principal de la trompeta)
     'Do5': 3,    // Segundo espacio
-    'Do#5': 3, 'Reb5': 3,
+    'Do#5': 3, 'Reb5': 2,
     'Re5': 2,    // Segunda línea
-    'Re#5': 2, 'Mib5': 2,
+    'Re#5': 2, 'Mib5': 1,
     'Mi5': 1,    // Primer espacio
     'Fa5': 0,    // Primera línea (superior del pentagrama)
-    'Fa#5': 0, 'Solb5': 0,
+    'Fa#5': 0, 'Solb5': -1,
     'Sol5': -1,  // Encima del pentagrama
-    'Sol#5': -1, 'Lab5': -1,
+    'Sol#5': -1, 'Lab5': -2,
     'La5': -2,   // Primera línea adicional superior
-    'La#5': -2, 'Sib5': -2,
+    'La#5': -2, 'Sib5': -3,
     'Si5': -3,   // Encima del pentagrama (segunda línea adicional superior)
   };
 
@@ -109,8 +109,8 @@ const MusicalStaff: React.FC<MusicalStaffProps> = ({
     }
 
     // Líneas adicionales superiores (encima del pentagrama)
-    if (position <= -1) {
-      for (let i = -1; i >= position; i -= 2) {
+    if (position <= 0) {
+      for (let i = 0; i >= position; i -= 2) {
         const y = staffTop + i * (staffLineSpacing / 2);
         lines.push(
           <line

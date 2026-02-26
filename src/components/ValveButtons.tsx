@@ -14,7 +14,8 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
   expectedFingering = null,
   showHints = true,
   disabled = false,
-  onToggleHints
+  onToggleHints,
+  wrongValves = [false, false, false],
 }) => {
 
   /**
@@ -93,6 +94,7 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
               ...(pressedValves[valveIndex] === 1 ? styles.valvePressed : {}),
               ...(disabled ? styles.valveDisabled : {}),
               ...(showHints && expectedFingering && expectedFingering[valveIndex] === 1 ? styles.valveExpected : {}),
+              ...(wrongValves[valveIndex] ? styles.valveWrong : {}),
             }}
             aria-label={`Válvula ${valveIndex + 1}`}
             aria-pressed={pressedValves[valveIndex] === 1}
@@ -173,6 +175,12 @@ const styles: { [key: string]: React.CSSProperties } = {
   valveExpected: {
     borderColor: '#1976D2',
     boxShadow: '0 0 10px rgba(25,118,210,0.5)',
+  },
+  valveWrong: {
+    backgroundColor: '#F44336',
+    borderColor: '#B71C1C',
+    boxShadow: '0 0 14px rgba(244,67,54,0.8)',
+    transform: 'translateY(4px) scale(0.97)',
   },
   valveNumber: {
     fontSize: '28px',
