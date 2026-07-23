@@ -1,6 +1,6 @@
 /**
  * Componente ValveButtons
- * Renderiza los tres botones que representan las válvulas de la trompeta
+ * Renderiza N botones que representan las válvulas/rotores del instrumento activo
  * Cada botón puede ser presionado/despresionado y muestra su estado visual
  */
 
@@ -15,8 +15,18 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
   showHints = true,
   disabled = false,
   onToggleHints,
-  wrongValves = [false, false, false],
+  wrongValves,
+  valveCount = 3,
+  title = 'Válvulas de Trompeta',
+  unitLabel = 'Válvula',
+  keyBindings = [
+    { main: '1', alt: '8' },
+    { main: '2', alt: '9' },
+    { main: '3', alt: '0' },
+  ],
 }) => {
+  // Default wrongValves to all false if not provided
+  const safeWrongValves = wrongValves || Array(valveCount).fill(false);
 
   /**
    * Maneja el click en un botón de válvula
@@ -29,26 +39,25 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
 
   /**
    * Maneja la tecla presionada para control por teclado
-   * Mapeo: 1 -> válvula 0, 2 -> válvula 1, 3 -> válvula 2
+   * El keymap se construye dinámicamente a partir de keyBindings
    */
   React.useEffect(() => {
+    // Build keyMap dynamically from keyBindings
+    const keyMap: { [key: string]: number } = {};
+    keyBindings.forEach((binding, index) => {
+      keyMap[binding.main] = index;
+      keyMap[binding.alt] = index;
+    });
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (disabled) return;
-      // Support both numeric row 1/2/3 and numpad-ish 8/9/0 per user request
-      const keyMap: { [key: string]: number } = {
-        '1': 0,
-        '2': 1,
-        '3': 2,
-        '8': 0,
-        '9': 1,
-        '0': 2,
-      };
+      if (e.repeat) return;
 
       // Tecla espacio para notas abiertas (resetea todas las válvulas)
       if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault(); // Evitar scroll
         if (onValveSet) {
-          [0, 1, 2].forEach(idx => onValveSet(idx, 0));
+          Array.from({ length: valveCount }).forEach((_, idx) => onValveSet(idx, 0));
         }
         return;
       }
@@ -61,7 +70,6 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      const keyMap: { [key: string]: number } = { '1': 0, '2': 1, '3': 2, '8': 0, '9': 1, '0': 2 };
       if (keyMap.hasOwnProperty(e.key)) {
         const idx = keyMap[e.key];
         if (onValveSet) onValveSet(idx, 0);
@@ -74,13 +82,17 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [disabled, pressedValves]);
+  }, [disabled, valveCount, keyBindings]);
+
+  // Generate keyboard hint text dynamically
+  const altKeys = keyBindings.map(b => b.alt).join(', ');
+  const hintText = `Usa ${altKeys} para ${unitLabel.toLowerCase()}s o espacio para notas abiertas`;
 
   return (
     <div style={styles.container}>
-      <h3 style={styles.title}>Válvulas de Trompeta</h3>
+      <h3 style={styles.title}>{title}</h3>
       <div style={styles.buttonsContainer}>
-        {[0, 1, 2].map((valveIndex) => (
+        {Array.from({ length: valveCount }).map((_, valveIndex) => (
           <button
             key={valveIndex}
             onMouseDown={() => onValveSet ? onValveSet(valveIndex, 1) : handleValveClick(valveIndex)}
@@ -94,9 +106,9 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
               ...(pressedValves[valveIndex] === 1 ? styles.valvePressed : {}),
               ...(disabled ? styles.valveDisabled : {}),
               ...(showHints && expectedFingering && expectedFingering[valveIndex] === 1 ? styles.valveExpected : {}),
-              ...(wrongValves[valveIndex] ? styles.valveWrong : {}),
+              ...(safeWrongValves[valveIndex] ? styles.valveWrong : {}),
             }}
-            aria-label={`Válvula ${valveIndex + 1}`}
+            aria-label={`${unitLabel} ${valveIndex + 1}`}
             aria-pressed={pressedValves[valveIndex] === 1}
           >
             <div style={styles.valveNumber}>{valveIndex + 1}</div>
@@ -107,7 +119,7 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
         ))}
       </div>
       <p style={styles.hint}>
-        Usa <kbd>8</kbd>, <kbd>9</kbd>, <kbd>0</kbd> para las válvulas o <kbd>espacio</kbd> para notas abiertas
+        {hintText}
       </p>
       {/* Control de pistas */}
       <div style={styles.hintsControl}>
@@ -118,7 +130,7 @@ const ValveButtons: React.FC<ValveButtonsProps> = ({
             onChange={(e) => onToggleHints?.(e.target.checked)}
             style={styles.checkbox}
           />
-          Mostrar pistas de válvulas
+          Mostrar pistas de {unitLabel.toLowerCase()}s
         </label>
       </div>
     </div>

@@ -1,6 +1,7 @@
 /**
  * Componente principal de la aplicación
  * Integra todos los componentes y gestiona el estado global del simulador
+ * Soporta múltiples instrumentos: Trompeta (3 válvulas) y Trompa (4 rotores)
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -12,17 +13,59 @@ import {
     PlayerStats,
     PracticeState,
     Song,
-    FingeringMap
+    FingeringMap,
+    InstrumentId,
+    InstrumentConfig
 } from './types';
 
 // Importar datos directamente para evitar problemas de fetch en producción
 import fingeringMapData from './data/fingering_map.json';
 import scalesDataImport from './data/scales.json';
+import hornFingeringMapData from './data/horn_fingering_map.json';
+import hornScalesData from './data/horn_scales.json';
+
+// ===== CONFIGURACIÓN DE INSTRUMENTOS =====
+const INSTRUMENTS: Record<InstrumentId, InstrumentConfig> = {
+    trompeta: {
+        id: 'trompeta',
+        nombre: 'Trompeta',
+        valveCount: 3,
+        unitLabel: 'Válvula',
+        fingeringMapFile: fingeringMapData as unknown as FingeringMap,
+        scalesFile: scalesDataImport,
+        keyBindings: [
+            { main: 'i', alt: 'I' },
+            { main: 'o', alt: 'O' },
+            { main: 'p', alt: 'P' },
+        ],
+    },
+    trompa: {
+        id: 'trompa',
+        nombre: 'Corno Francés (Trompa)',
+        valveCount: 4,
+        unitLabel: 'Rotor',
+        fingeringMapFile: hornFingeringMapData as unknown as FingeringMap,
+        scalesFile: hornScalesData,
+        keyBindings: [
+            { main: 'q', alt: 'Q' },
+            { main: 'w', alt: 'W' },
+            { main: 'e', alt: 'E' },
+            { main: 'c', alt: 'C' },
+        ],
+    },
+};
 
 const App: React.FC = () => {
     // ===== ESTADO PRINCIPAL =====
-    const [pressedValves, setPressedValves] = useState<ValveCombination>([0, 0, 0]);
-    const [wrongValves, setWrongValves] = useState<boolean[]>([false, false, false]);
+    const [instrument, setInstrument] = useState<InstrumentId>('trompeta');
+    const currentInstrument = INSTRUMENTS[instrument];
+
+    const [pressedValves, setPressedValves] = useState<ValveCombination>(
+        Array(INSTRUMENTS.trompeta.valveCount).fill(0)
+    );
+    const [wrongValves, setWrongValves] = useState<boolean[]>(
+        Array(INSTRUMENTS.trompeta.valveCount).fill(false)
+    );
     const [stats, setStats] = useState<PlayerStats>({
         correctCount: 0,
         incorrectCount: 0,
@@ -46,25 +89,50 @@ const App: React.FC = () => {
     const [showHints, setShowHints] = useState<boolean>(true);
     const [showNoteName, setShowNoteName] = useState<boolean>(true);
     const [practiceMode, setPracticeMode] = useState<'random' | 'scale'>('random');
-    const [selectedScaleType, setSelectedScaleType] = useState<'sostenidos' | 'bemoles'>('sostenidos');
+    const [selectedScaleType, setSelectedScaleType] = useState<'naturales' | 'sostenidos' | 'bemoles'>('sostenidos');
     const [selectedScale, setSelectedScale] = useState<string>('SolMayor');
 
     const [scalesData, setScalesData] = useState<any>(scalesDataImport);
+
+    // ===== CAMBIO DE INSTRUMENTO =====
+    useEffect(() => {
+        const config = INSTRUMENTS[instrument];
+        // Reset estado al cambiar de instrumento
+        setPressedValves(Array(config.valveCount).fill(0));
+        setWrongValves(Array(config.valveCount).fill(false));
+        setPracticeState({
+            currentEventIndex: -1,
+            currentNote: null,
+            expectedFingering: null,
+            isPlaying: false,
+            startTime: null,
+        });
+        // Cargar datos del instrumento
+        setFingeringMap(config.fingeringMapFile);
+        setScalesData(config.scalesFile);
+        // Seleccionar la primera escala disponible del nuevo instrumento
+        const firstType = Object.keys(config.scalesFile)[0] as 'naturales' | 'sostenidos' | 'bemoles';
+        if (firstType) {
+            setSelectedScaleType(firstType);
+            const firstScale = Object.keys(config.scalesFile[firstType] || {})[0] || '';
+            setSelectedScale(firstScale);
+        }
+    }, [instrument]);
 
     // ===== CARGA INICIAL DE DATOS =====
     useEffect(() => {
         loadFingeringMap();
         loadScales();
         loadDefaultSong();
-    }, [noteCount, noteDurationMs, practiceMode, selectedScale, selectedScaleType]);
+    }, [noteCount, noteDurationMs, practiceMode, selectedScale, selectedScaleType, instrument]);
 
     /**
      * Carga el mapa de digitaciones desde JSON importado
      */
     const loadFingeringMap = async () => {
         try {
-            setFingeringMap(fingeringMapData as unknown as FingeringMap);
-            console.log('[App] Mapa de digitaciones cargado (import)');
+            setFingeringMap(INSTRUMENTS[instrument].fingeringMapFile);
+            console.log(`[App] Mapa de digitaciones cargado para ${INSTRUMENTS[instrument].nombre}`);
         } catch (error) {
             console.error('[App] Error al cargar mapa de digitaciones:', error);
         }
@@ -75,8 +143,8 @@ const App: React.FC = () => {
      */
     const loadScales = async () => {
         try {
-            setScalesData(scalesDataImport);
-            console.log('[App] Escalas cargadas (import)');
+            setScalesData(INSTRUMENTS[instrument].scalesFile);
+            console.log(`[App] Escalas cargadas para ${INSTRUMENTS[instrument].nombre}`);
         } catch (error) {
             console.error('[App] Error al cargar escalas:', error);
         }
@@ -108,10 +176,7 @@ const App: React.FC = () => {
                 }
             } else {
                 // Modo aleatorio: usar todas las notas disponibles (sostenidos y bemoles)
-                const availableNotes = [
-                    "Do4", "Do#4", "Reb4", "Re4", "Re#4", "Mib4", "Mi4", "Fa4", "Fa#4", "Solb4", "Sol4", "Sol#4", "Lab4", "La4", "La#4", "Sib4", "Si4",
-                    "Do5", "Do#5", "Reb5", "Re5", "Re#5", "Mib5", "Mi5", "Fa5", "Fa#5", "Solb5", "Sol5", "Sol#5", "Lab5", "La5", "La#5", "Sib5", "Si5"
-                ];
+                const availableNotes = Object.keys(INSTRUMENTS[instrument].fingeringMapFile);
                 title = `Práctica de ${noteCount} notas`;
 
                 // Crear eventos de forma aleatoria
@@ -247,7 +312,7 @@ const App: React.FC = () => {
                                     startTime: Date.now(),
                                 });
                                 setTimeRemaining(nextEvent.dur_ms);
-                                setPressedValves([0, 0, 0]);
+                                setPressedValves(Array(INSTRUMENTS[instrument].valveCount).fill(0));
                             }, 500);
                         }
                     }
@@ -303,7 +368,7 @@ const App: React.FC = () => {
                                         startTime: Date.now(),
                                     });
                                     setTimeRemaining(nextEvent.dur_ms);
-                                    setPressedValves([0, 0, 0]);
+                                    setPressedValves(Array(INSTRUMENTS[instrument].valveCount).fill(0));
                                 }, 500);
                             }
                         }
@@ -317,8 +382,8 @@ const App: React.FC = () => {
     }, [practiceState, currentSong, fingeringMap, playTone]);
 
     const resetValves = useCallback(() => {
-        setPressedValves([0, 0, 0]);
-    }, []);
+        setPressedValves(Array(INSTRUMENTS[instrument].valveCount).fill(0));
+    }, [instrument]);
 
     const checkFingering = useCallback(() => {
         if (!practiceState.expectedFingering) return;
@@ -446,11 +511,10 @@ const App: React.FC = () => {
         return () => clearInterval(interval);
     }, [practiceState, currentSong, nextNote]);
 
-    const newLocal = "50";
     return (
         <div style={styles.app}>
             <header style={styles.header}>
-                <h1 style={styles.title}>🎺 Simulador de Trompeta</h1>
+                <h1 style={styles.title}>🎺 Simulador de {currentInstrument.nombre}</h1>
                 <p style={styles.subtitle}>Practica tu digitación de forma interactiva</p>
             </header>
 
@@ -475,6 +539,10 @@ const App: React.FC = () => {
                             expectedFingering={showHints ? practiceState.expectedFingering : null}
                             onToggleHints={setShowHints}
                             wrongValves={wrongValves}
+                            valveCount={currentInstrument.valveCount}
+                            title={`Válvulas de ${currentInstrument.nombre}`}
+                            unitLabel={currentInstrument.unitLabel}
+                            keyBindings={currentInstrument.keyBindings}
                         />
                     </div>
 
@@ -513,6 +581,24 @@ const App: React.FC = () => {
 
                     <div style={styles.controlPanel}>
                         <div style={styles.modeSelector}>
+                            <label style={styles.selectorLabel}>Instrumento:</label>
+                            <div style={styles.radioGroup}>
+                                {Object.values(INSTRUMENTS).map(inst => (
+                                    <label key={inst.id} style={styles.radioLabel}>
+                                        <input
+                                            type="radio"
+                                            value={inst.id}
+                                            checked={instrument === inst.id}
+                                            onChange={(e) => setInstrument(e.target.value as InstrumentId)}
+                                            style={styles.radioInput}
+                                        />
+                                        {inst.nombre}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={styles.modeSelector}>
                             <label style={styles.selectorLabel}>Modo de práctica:</label>
                             <div style={styles.radioGroup}>
                                 <label style={styles.radioLabel}>
@@ -546,14 +632,15 @@ const App: React.FC = () => {
                                         id="scaleType"
                                         value={selectedScaleType}
                                         onChange={(e) => {
-                                            const newType = e.target.value as 'sostenidos' | 'bemoles';
+                                            const newType = e.target.value as 'naturales' | 'sostenidos' | 'bemoles';
                                             setSelectedScaleType(newType);
-                                            // Seleccionar la primera escala del nuevo tipo
-                                            const firstScale = Object.keys(scalesData[newType])[0];
-                                            setSelectedScale(firstScale);
+                                            // Seleccionar la primera escala del nuevo tipo (protegido contra vacío)
+                                            const scales = Object.keys(scalesData[newType] || {});
+                                            setSelectedScale(scales.length > 0 ? scales[0] : '');
                                         }}
                                         style={styles.select}
                                     >
+                                        <option value="naturales">Naturales</option>
                                         <option value="sostenidos">Sostenidos (#)</option>
                                         <option value="bemoles">Bemoles (♭)</option>
                                     </select>
@@ -585,19 +672,19 @@ const App: React.FC = () => {
                                 type="number"
                                 id="noteCount"
                                 min="1"
-                                max={newLocal}
+                                max={50}
                                 value={noteCount}
                                 onChange={(e) => {
-                                    const value = Math.max(1, Math.min(50, parseInt(e.target.value)));
+                                    const value = Math.max(1, Math.min(50, parseInt(e.target.value) || 1));
                                     setNoteCount(value);
                                     loadDefaultSong();
                                 }}
                                 style={styles.numberInput}
                                 disabled={practiceMode === 'scale'}
                             />
-                            {practiceMode === 'scale' && (
+                            {practiceMode === 'scale' && scalesData && scalesData[selectedScaleType] && scalesData[selectedScaleType][selectedScale] && (
                                 <span style={{ fontSize: '10px', color: '#999', marginLeft: '5px' }}>
-                                    (8 notas)
+                                    ({Object.keys(scalesData[selectedScaleType][selectedScale].notas).length} notas)
                                 </span>
                             )}
                         </div>

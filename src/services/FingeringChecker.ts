@@ -16,7 +16,8 @@ export const FingeringChecker = {
     }
 
     const isCorrect =
-      expected[0] === input[0] && expected[1] === input[1] && expected[2] === input[2];
+      expected.length === input.length &&
+      expected.every((v, i) => v === input[i]);
 
     return {
       isCorrect,

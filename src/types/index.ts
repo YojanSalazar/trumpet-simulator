@@ -1,15 +1,33 @@
 /**
- * Tipos principales para el simulador de trompeta
+ * Tipos principales para el simulador de instrumentos de viento metal
  * Este archivo centraliza todas las interfaces y tipos utilizados en la aplicación
  */
 
 /**
- * Representación de una combinación de válvulas
- * [0,0,0] = ninguna válvula presionada
- * [1,0,0] = primera válvula presionada
- * [1,1,0] = primera y segunda válvulas presionadas
+ * Representación de una combinación de válvulas/rotores
+ * La longitud del array depende del instrumento (3 para trompeta, 4 para trompa)
+ * Ejemplo: [0,0,0] = ninguna válvula presionada (trompeta)
+ * Ejemplo: [1,0,0,0] = primer rotor presionado (trompa)
  */
-export type ValveCombination = [number, number, number];
+export type ValveCombination = number[];
+
+/**
+ * Identificador de instrumento soportado
+ */
+export type InstrumentId = 'trompeta' | 'trompa';
+
+/**
+ * Configuración completa de un instrumento
+ */
+export interface InstrumentConfig {
+  id: InstrumentId;
+  nombre: string;           // "Trompeta" | "Corno Francés (Trompa)"
+  valveCount: number;       // 3 | 4
+  unitLabel: string;        // "Válvula" | "Rotor"
+  fingeringMapFile: FingeringMap;
+  scalesFile: any;
+  keyBindings: { main: string; alt: string }[];
+}
 
 /**
  * Información completa de digitación para una nota específica
@@ -103,6 +121,14 @@ export interface ValveButtonsProps {
   onToggleHints?: (show: boolean) => void;
   /** Índices de las válvulas presionadas incorrectamente — se muestran en rojo */
   wrongValves?: boolean[];
+  /** Número de válvulas/rotores del instrumento (default: 3) */
+  valveCount?: number;
+  /** Título del componente (default: "Válvulas de Trompeta") */
+  title?: string;
+  /** Etiqueta por unidad: "Válvula" o "Rotor" (default: "Válvula") */
+  unitLabel?: string;
+  /** Mapeo de teclas por válvula/rotor */
+  keyBindings?: { main: string; alt: string }[];
 }
 
 /**
